@@ -1,0 +1,13 @@
+{
+  "name": "express-asap",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^17.0.21"
+  },
+  "dependencies": {
+    "httplease": "^0.8.4",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
