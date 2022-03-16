@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import createAsapAuthenticator from "./authenticator";
+import { Request, Response, NextFunction } from 'express';
+import createAsapAuthenticator from './authenticator';
 
-export default function createAsapAuthenticationMiddleware(opts: any) {
+export function createAsapAuthenticationMiddleware(opts: any) {
   const authenticateAsapHeader = createAsapAuthenticator(opts);
 
   return function asapAuthenticationMiddleware(
@@ -12,14 +12,16 @@ export default function createAsapAuthenticationMiddleware(opts: any) {
     const authHeader = request.headers.authorization;
     if (authHeader) {
       return authenticateAsapHeader(authHeader)
-        .then((asapClaims) => {
+        .then(asapClaims => {
           response.locals.asapClaims = asapClaims;
           next();
         })
-        .catch((error) => {
+        .catch(error => {
           next(error);
         });
     }
     return next();
   };
 }
+
+export default createAsapAuthenticationMiddleware;

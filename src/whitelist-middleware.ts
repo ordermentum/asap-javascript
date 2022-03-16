@@ -1,13 +1,13 @@
-import assert from "assert";
-import { Request, Response, NextFunction } from "express";
-import { AsapAuthorizationError } from "./errors";
+import assert from 'assert';
+import { Request, Response, NextFunction } from 'express';
+import { AsapAuthorizationError } from './errors';
 
-export default function createAsapIssuerWhitelistMiddleware(
+export function createAsapIssuerWhitelistMiddleware(
   authorizedIssuers: string[]
 ) {
   assert.ok(
     Array.isArray(authorizedIssuers),
-    "authorizedIssuers must be an array"
+    'authorizedIssuers must be an array'
   );
 
   return function asapAuthorizationMiddleware(
@@ -15,12 +15,14 @@ export default function createAsapIssuerWhitelistMiddleware(
     response: Response,
     next: NextFunction
   ) {
-    const asapClaims = response.locals.asapClaims;
+    const { asapClaims } = response.locals;
 
     if (asapClaims && authorizedIssuers.includes(asapClaims.iss)) {
       return next();
     }
 
-    next(new AsapAuthorizationError("Unauthorized issuer or subject"));
+    return next(new AsapAuthorizationError('Unauthorized issuer or subject'));
   };
 }
+
+export default createAsapIssuerWhitelistMiddleware;
