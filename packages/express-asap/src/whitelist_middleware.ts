@@ -1,7 +1,15 @@
 import assert from 'assert';
 import { Request, Response, NextFunction } from 'express';
-import { AsapAuthorizationError } from './errors';
+import { AsapAuthorizationError } from '@ordermentum/asap-core';
 
+/**
+ * Creates an express middleware to restrict requests to whitelisted issuers
+ *
+ *
+ * @param authorizedIssuers - string array of known issuers
+ * @returns Express middleware function
+ *
+ */
 export function createAsapIssuerWhitelistMiddleware(
   authorizedIssuers: string[]
 ) {

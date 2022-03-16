@@ -1,19 +1,30 @@
- express-asap
+# Javascript Atlassian ASAP S2S Authentication
 
-This is an implementation of [ASAP S2S Authentication](https://s2sauth.bitbucket.io/) as both an [Express](https://expressjs.com/) middleware and a generic authenticator function which works without express.
+<p>
+  <a href="#" target="_blank">
+    <img alt="License: Apache--2.0" src="https://img.shields.io/badge/License-Apache--2.0-yellow.svg" />
+  </a>
+</p>
 
+This is an implementation of [Atlassian ASAP S2S Authentication](https://s2sauth.bitbucket.io/).
 
-This is forked from a no longer public bitbucket repo.
+This is a mono repo with
 
+- An [Express](https://expressjs.com/) middleware and a generic authenticator function which works without express. @ordermentum/express-asap
+- An header generation library for usage in http clients @ordermentum/asap-core
+
+This started as a forked from a no longer public bitbucket repo - all credit to Atlassian.
 
 # Usage guide
 
 Install the library:
 
 ```
+# server
 npm install --save @ordermentum/express-asap
+# client
+npm install --save @ordermentum/asap-core
 ```
-
 
 ## Express configuration
 
@@ -44,11 +55,10 @@ app.listen(8080);
 
 For more examples have a look at the `test/integration` directory.
 
-
 ## Use without Express
 
 ```
-const {createAsapAuthenticator} = require('@atlassian/express-asap');
+const {createAsapAuthenticator} = require('@ordermentum/asap-core');
 
 const authenticateAsapHeader = createAsapAuthenticationMiddleware({
   publicKeyBaseUrls: [
@@ -69,8 +79,6 @@ authenticateAsapHeader('Bearer foo')
   .catch((error) => console.log('Authentication failed!', error));
 ```
 
-
-
 # Development guide
 
 ## Install dependencies
@@ -79,20 +87,18 @@ authenticateAsapHeader('Bearer foo')
 npm install
 ```
 
-
 ## Useful commands
 
 ```
-# Run all checks
-npm test
+# Run the typecheck
+yarn run turbo run typecheck
 
-# Run just the jasmine tests
-npm run test:jasmine
+# Run the mocha tests
+yarn run turbo run test
 
-# Run just the linter
-npm run test:lint
+# Run the linter
+yarn run turbo run lint
 ```
-
 
 ## Perform a release
 

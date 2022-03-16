@@ -90,21 +90,33 @@ function validateTimeClaims(
   }
 }
 
-export function createAsapAuthenticator({
-  publicKeyBaseUrls,
-  resourceServerAudience,
-  maxLifeTimeSeconds = DEFAULT_MAX_LIFETIME_SECONDS,
-}: {
-  publicKeyBaseUrls: string[];
+export type KeyLoader = (keyId: string) => Promise<string>;
+export type AuthenticatorOptions = {
   resourceServerAudience: string;
   maxLifeTimeSeconds: number;
-}) {
-  assert.ok(publicKeyBaseUrls, 'publicKeyBaseUrls must be set');
+} & {
+  publicKeyBaseUrls?: string[];
+  keyLoader?: KeyLoader;
+};
+
+export function createAsapAuthenticator({
+  publicKeyBaseUrls,
+  keyLoader,
+  resourceServerAudience,
+  maxLifeTimeSeconds = DEFAULT_MAX_LIFETIME_SECONDS,
+}: AuthenticatorOptions) {
   assert.ok(resourceServerAudience, 'resourceServerAudience must be set');
 
-  const getPublicKeyFn = createPublicKeyFetcher({
-    publicKeyBaseUrls,
-  });
+  let getPublicKey: KeyLoader;
+
+  if (keyLoader) {
+    getPublicKey = keyLoader;
+  } else {
+    assert.ok(publicKeyBaseUrls, 'publicKeyBaseUrls must be set');
+    getPublicKey = createPublicKeyFetcher({
+      publicKeyBaseUrls,
+    });
+  }
 
   const verifyOptions = {
     algorithms: ALLOWED_ALGORITHMS,
@@ -137,7 +149,7 @@ export function createAsapAuthenticator({
     }
 
     validateIssuerAndKeyId(issuer, keyId);
-    const publicKey = await getPublicKeyFn(keyId);
+    const publicKey = await getPublicKey(keyId);
     const asapClaims = jsonWebToken.verify(jwtString, publicKey, verifyOptions);
     validateTimeClaims(asapClaims as JwtPayload, maxLifeTimeSeconds);
     return asapClaims;

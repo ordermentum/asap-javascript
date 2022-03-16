@@ -1,7 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import createAsapAuthenticator from './authenticator';
+import {
+  createAsapAuthenticator,
+  AuthenticatorOptions,
+} from '@ordermentum/asap-core';
 
-export function createAsapAuthenticationMiddleware(opts: any) {
+/**
+ * Creates an express middleware to validate the authorization header
+ * using the ASAP standard
+ *
+ * @param opts AuthenticatorOptions
+ * @returns Express middleware function
+ *
+ */
+export function createAsapAuthenticationMiddleware(opts: AuthenticatorOptions) {
   const authenticateAsapHeader = createAsapAuthenticator(opts);
 
   return function asapAuthenticationMiddleware(

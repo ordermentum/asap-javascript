@@ -1,5 +1,5 @@
 {
-  "name": "@ordermentum/express-asap",
+  "name": "@ordermentum/asap",
   "version": "0.1.0",
   "main": "build/index.js",
   "license": "MIT",
@@ -15,16 +15,14 @@
     "mocha-sinon": "^2.1.2",
     "ts-node": "^10.7.0",
     "ts-node-dev": "^1.1.8",
+    "turbo": "^1.1.6",
     "typescript": "^4.6.2"
   },
-  "scripts": {
-    "build": "rm -rf build && tsc",
-    "lint": "eslint '**/*.{ts,js}'",
-    "typecheck": "node node_modules/typescript/bin/tsc --noEmit"
-  },
-  "dependencies": {
-    "axios": "^0.26.1",
-    "express": "^4.17.3",
-    "jsonwebtoken": "^8.5.1"
-  }
+  "scripts": {},
+  "dependencies": {},
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "packageManager": "yarn@1.18.0"
 }
