@@ -3,12 +3,15 @@
 This is an implementation of [ASAP S2S Authentication](https://s2sauth.bitbucket.io/) as both an [Express](https://expressjs.com/) middleware and a generic authenticator function which works without express.
 
 
+This is forked from a no longer public bitbucket repo.
+
+
 # Usage guide
 
 Install the library:
 
 ```
-npm install --save @atlassian/express-asap
+npm install --save @ordermentum/express-asap
 ```
 
 
