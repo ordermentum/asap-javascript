@@ -27,8 +27,5 @@
   "exclude": [
     "build",
     "node_modules"
-  ],
-  "files": [
-    "src/definitions/express.d.ts"
   ]
 }

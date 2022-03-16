@@ -1,16 +1,26 @@
-import assert from 'assert';
-import { AsapAuthorizationError } from './errors';
+import assert from "assert";
+import { Request, Response, NextFunction } from "express";
+import { AsapAuthorizationError } from "./errors";
 
-export default function createAsapIssuerWhitelistMiddleware(authorizedIssuers) {
-    assert.ok(Array.isArray(authorizedIssuers), 'authorizedIssuers must be an array');
+export default function createAsapIssuerWhitelistMiddleware(
+  authorizedIssuers: string[]
+) {
+  assert.ok(
+    Array.isArray(authorizedIssuers),
+    "authorizedIssuers must be an array"
+  );
 
-    return function asapAuthorizationMiddleware(request, response, next) {
-        const asapClaims = response.locals.asapClaims;
+  return function asapAuthorizationMiddleware(
+    _request: Request,
+    response: Response,
+    next: NextFunction
+  ) {
+    const asapClaims = response.locals.asapClaims;
 
-        if (asapClaims && authorizedIssuers.includes(asapClaims.iss)) {
-            return next();
-        }
+    if (asapClaims && authorizedIssuers.includes(asapClaims.iss)) {
+      return next();
+    }
 
-        next(new AsapAuthorizationError('Unauthorized issuer or subject'));
-    };
+    next(new AsapAuthorizationError("Unauthorized issuer or subject"));
+  };
 }

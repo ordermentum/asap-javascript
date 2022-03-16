@@ -1,62 +1,28 @@
 import assert from "assert";
 import { URL } from "url";
-
-import httplease from "httplease";
-import httpleaseCache from "httplease-cache";
+import axios from 'axios';
 
 export default function createPublicKeyFetcher({
   publicKeyBaseUrls,
-  theCache,
-}) {
+}: { publicKeyBaseUrls: string[]; }) {
   const validatedPublicKeyBaseUrls = parseUrlArray(publicKeyBaseUrls);
   assert.ok(
     validatedPublicKeyBaseUrls.length > 0,
     "At least one publicKeyBaseUrl is required"
   );
 
-  const sharedCacheFilter = httpleaseCache.createCacheFilter({
-    generateCacheKey,
-    theCache,
-  });
-  function generateCacheKey(requestConfig) {
-    return requestConfig.path; // this is always exactly equal to the keyId
-  }
-
-  const baseClient = httplease
-    .builder()
-    .withClientName("asapAuthenticationKeyFetcher")
-    .withMethodGet()
-    .withExpectStatus([200])
-    .withBufferBodyResponseHandler()
-    .withTimeout(15000)
-    .withFilter(sharedCacheFilter);
-
   const clients = validatedPublicKeyBaseUrls.map((baseUrl) =>
-    baseClient.withBaseUrl(baseUrl)
+    axios.create({ baseURL: baseUrl, timeout: 15000 })
   );
 
-  return async function getPublicKey(keyId) {
-    const promises = clients.map((client) => client.withPath(keyId).send());
-    const response = await anyPromise(promises);
-    return response.body;
+  return async function getPublicKey(keyId: string) {
+    const promises = clients.map((client) => client.get(keyId));
+    const response = await Promise.race(promises);
+    return response.data;
   };
 }
 
-function anyPromise(promises) {
-  return new Promise((resolve, reject) => {
-    let remaining = promises.length;
-    promises.forEach((promise) =>
-      promise.then(resolve, (err) => {
-        --remaining;
-        if (remaining === 0) {
-          reject(err);
-        }
-      })
-    );
-  });
-}
-
-function parseUrlArray(array) {
+function parseUrlArray(array: string[]) {
   const urls = array.map((urlString) => new URL(urlString));
 
   assert.ok(

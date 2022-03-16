@@ -1,11 +1,11 @@
 import assert from "assert";
-import jsonWebToken from "jsonwebtoken";
-import httplease from "httplease";
+import jsonWebToken, { JwtPayload, Algorithm } from "jsonwebtoken";
 
+import axios from "axios";
 import createPublicKeyFetcher from "./fetch";
 import { AsapAuthenticationError } from "./errors";
 
-const ALLOWED_ALGORITHMS = [
+const ALLOWED_ALGORITHMS: Algorithm[] = [
   "RS256",
   "RS384",
   "RS512",
@@ -16,21 +16,24 @@ const ALLOWED_ALGORITHMS = [
   "PS384",
   "PS512",
 ];
-const CLOCK_TOLERANCE_SECONDS = process.env.ASAP_SERVER_LEEWAY_SECONDS || 30;
+const CLOCK_TOLERANCE_SECONDS =
+  parseInt(process.env.ASAP_SERVER_LEEWAY_SECONDS ?? "", 10) || 30;
 const DEFAULT_MAX_LIFETIME_SECONDS = 3600;
 
 export default function createAsapAuthenticator({
   publicKeyBaseUrls,
   resourceServerAudience,
-  theCache,
   maxLifeTimeSeconds = DEFAULT_MAX_LIFETIME_SECONDS,
+}: {
+  publicKeyBaseUrls: string[];
+  resourceServerAudience: string;
+  maxLifeTimeSeconds: number;
 }) {
   assert.ok(publicKeyBaseUrls, "publicKeyBaseUrls must be set");
   assert.ok(resourceServerAudience, "resourceServerAudience must be set");
 
   const getPublicKeyFn = createPublicKeyFetcher({
     publicKeyBaseUrls,
-    theCache,
   });
 
   const verifyOptions = {
@@ -39,21 +42,22 @@ export default function createAsapAuthenticator({
     audience: resourceServerAudience,
   };
 
-  return async function authenticateAsapHeader(authHeader) {
+  return async function authenticateAsapHeader(authHeader: string) {
     try {
       return await getVerifiedAsapClaims(authHeader);
     } catch (error) {
-      if (error instanceof httplease.errors.HttpleaseError) {
+      if (axios.isAxiosError(error)) {
         throw new AsapAuthenticationError("failed to fetch public key", error);
       }
       if (error instanceof jsonWebToken.JsonWebTokenError) {
-        throw new AsapAuthenticationError(error.message);
+        let e = error as jsonWebToken.JsonWebTokenError;
+        throw new AsapAuthenticationError(e.message);
       }
       throw error;
     }
   };
 
-  async function getVerifiedAsapClaims(authHeader) {
+  async function getVerifiedAsapClaims(authHeader: string) {
     if (!authHeader) {
       return;
     }
@@ -64,28 +68,39 @@ export default function createAsapAuthenticator({
     }
 
     const unverifiedJwt = jsonWebToken.decode(jwtString, { complete: true });
-    assertAsap(unverifiedJwt, "jwt could not be decoded");
+
+    if (!unverifiedJwt) {
+      throw new AsapAuthenticationError("jwt could not be decoded");
+    }
+
+    const payload = unverifiedJwt.payload as { iss?: string };
     const keyId = unverifiedJwt.header.kid;
-    const issuer = unverifiedJwt.payload.iss;
+    const issuer = payload.iss ?? '';
+
+    if (!keyId) {
+      throw new AsapAuthenticationError("mising kid header");
+    }
 
     validateIssuerAndKeyId(issuer, keyId);
-
     const publicKey = await getPublicKeyFn(keyId);
-
     const asapClaims = jsonWebToken.verify(jwtString, publicKey, verifyOptions);
-    validateTimeClaims(asapClaims, maxLifeTimeSeconds);
+    validateTimeClaims(asapClaims as JwtPayload, maxLifeTimeSeconds);
     return asapClaims;
+    }
   }
-}
 
-function validateIssuerAndKeyId(issuer, keyId) {
+
+function validateIssuerAndKeyId(issuer: string, keyId: string) {
   const pattern = /^[\w.\-+/]*$/;
-  const keyIdComponents = typeof keyId === "string" && keyId.split("/");
+  const keyIdComponents = keyId.split("/");
 
-  assertAsap(keyId && pattern.test(keyId), "jwt has invalid keyId", { keyId });
-  assertAsap(issuer && pattern.test(issuer), "jwt has invalid issuer", {
+  assertAsap(!!keyId && pattern.test(keyId), "jwt has invalid keyId", {
+    keyId,
+  });
+  assertAsap(!!issuer && pattern.test(issuer), "jwt has invalid issuer", {
     issuer,
   });
+
   assertAsap(
     !keyIdComponents.includes(""),
     "jwt has keyId with invalid path component",
@@ -108,7 +123,14 @@ function validateIssuerAndKeyId(issuer, keyId) {
   );
 }
 
-function validateTimeClaims({ iat, nbf, exp }, maxLifeTimeSeconds) {
+function validateTimeClaims(
+  { iat, nbf, exp }: { iat?: number; nbf?: number; exp?: number },
+  maxLifeTimeSeconds: number
+) {
+if (!iat || !exp) {
+  throw new AsapAuthenticationError('invalid jwt missing headers'); 
+}
+
   assertAsap(iat < exp, "jwt issued after expiry", { iat, exp });
   assertAsap(
     iat + maxLifeTimeSeconds >= exp,
@@ -117,7 +139,7 @@ function validateTimeClaims({ iat, nbf, exp }, maxLifeTimeSeconds) {
   );
 
   assertAsap(
-    iat <= Date.now() / 1000 + CLOCK_TOLERANCE_SECONDS,
+    (iat && iat <= Date.now() / 1000 + CLOCK_TOLERANCE_SECONDS) === true,
     "jwt not active",
     { iat }
   );
@@ -128,7 +150,11 @@ function validateTimeClaims({ iat, nbf, exp }, maxLifeTimeSeconds) {
   }
 }
 
-function assertAsap(condition, message, cause) {
+function assertAsap(
+  condition: boolean,
+  message: string,
+  cause: any | null = null
+) {
   if (!condition) {
     throw new AsapAuthenticationError(message, cause);
   }
