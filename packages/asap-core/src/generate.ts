@@ -6,8 +6,7 @@ function assertDefined(value: string | null | undefined, message: string) {
     throw new Error(message);
   }
 }
-
-export function createAuthHeaderGenerator(jwtConfig: {
+export type AuthHeaderConfig = {
   privateKey: string;
   keyId: string;
   issuer: string;
@@ -16,7 +15,8 @@ export function createAuthHeaderGenerator(jwtConfig: {
   tokenMaxAgeMs?: number;
   additionalClaims?: any;
   subject?: string;
-}) {
+};
+export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
   assertDefined(jwtConfig.privateKey, 'jwtConfig.privateKey must be set');
   assertDefined(jwtConfig.keyId, 'jwtConfig.keyId must be set');
   assertDefined(jwtConfig.issuer, 'jwtConfig.issuer must be set');

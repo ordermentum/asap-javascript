@@ -21,7 +21,8 @@
   "scripts": {},
   "dependencies": {},
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "internal/*"
   ],
   "private": true,
   "packageManager": "yarn@1.18.0"

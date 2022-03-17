@@ -27,9 +27,8 @@ Kc/LHlXL9ubs1sW6ZQIDAQAB
 -----END PUBLIC KEY-----
 `.trim();
 
-export function parseAuthHeader(authHeader) {
+export function parseAuthHeader(authHeader: string) {
   const parts = authHeader.split(' ');
-  const scheme = parts[0];
   const token = parts[1];
   return jsonWebToken.verify(token, publicKey);
 }

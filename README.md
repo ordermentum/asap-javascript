@@ -10,8 +10,9 @@ This is an implementation of [Atlassian ASAP S2S Authentication](https://s2sauth
 
 This is a mono repo with
 
-- An [Express](https://expressjs.com/) middleware and a generic authenticator function which works without express. @ordermentum/express-asap
-- An header generation library for usage in http clients @ordermentum/asap-core
+- @ordermentum/asap-core a generic authenticator function and header generation library for usage in http clients
+- @ordermentum/express-asap An [Express](https://expressjs.com/) middleware
+- @ordermentum/axios-asap interceptor for axios
 
 This started as a forked from a no longer public bitbucket repo - all credit to Atlassian.
 
@@ -26,58 +27,7 @@ npm install --save @ordermentum/express-asap
 npm install --save @ordermentum/asap-core
 ```
 
-## Express configuration
-
-```
-const express = require('express');
-
-const {createAsapAuthenticationMiddleware, createAsapIssuerWhitelistMiddleware} = require('@atlassian/express-asap');
-
-const app = express();
-
-app.use(createAsapAuthenticationMiddleware({
-  publicKeyBaseUrls: [
-    config.get('jwt.publicKeyBaseUrl'),
-    config.get('jwt.publicKeyBaseUrlFallback')
-  ],
-  resourceServerAudience: config.get('jwt.audience')
-}));
-
-app.use('/some-resource',
-  createAsapIssuerWhitelistMiddleware(['some-authorized-issuer']),
-  (request, response) => {
-      response.send('This will only be reached by a request authenticated as some-authorized-issuer');
-  }
-);
-
-app.listen(8080);
-```
-
-For more examples have a look at the `test/integration` directory.
-
-## Use without Express
-
-```
-const {createAsapAuthenticator} = require('@ordermentum/asap-core');
-
-const authenticateAsapHeader = createAsapAuthenticationMiddleware({
-  publicKeyBaseUrls: [
-    config.get('jwt.publicKeyBaseUrl'),
-    config.get('jwt.publicKeyBaseUrlFallback')
-  ],
-  resourceServerAudience: config.get('jwt.audience')
-});
-
-authenticateAsapHeader('Bearer foo')
-  .then((asapClaims) => {
-    if (asapClaims) {
-      console.log('Authenticated!', asapClaims);
-    } else {
-      console.log('Anonymous!');
-    }
-  })
-  .catch((error) => console.log('Authentication failed!', error));
-```
+For more examples have a look at the `test/` directories.
 
 # Development guide
 

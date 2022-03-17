@@ -1,9 +1,8 @@
 import { describe, afterEach, beforeEach } from 'mocha';
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { parseAuthHeader, privateKeyPem } from '@ordermentum/asap-test-helpers';
 import createAuthHeaderGenerator from '../src/generate';
-
-import { parseAuthHeader, privateKeyPem } from './test_helper';
 
 describe('createAuthHeaderGenerator', () => {
   let jwtConfig;

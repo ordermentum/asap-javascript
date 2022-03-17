@@ -3,10 +3,9 @@ import { expect } from 'chai';
 import express from 'express';
 import request from 'supertest';
 import { createAuthHeaderGenerator } from '@ordermentum/asap-core';
+import { publicKey, privateKeyPem } from '@ordermentum/asap-test-helpers';
 import createAsapAuthenticationMiddleware from '../src/middleware';
 import createAsapIssuerWhitelistMiddleware from '../src/whitelist_middleware';
-
-import { publicKey, privateKeyPem } from './test_helper';
 
 const app = express();
 app.use(
