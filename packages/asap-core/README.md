@@ -3,7 +3,7 @@
 ```typescript
 import { createAsapAuthenticator } from "@ordermentum/asap-core";
 
-const authenticateAsapHeader = createAsapAuthenticationMiddleware({
+const authenticateAsapHeader = createAsapAuthenticator({
   publicKeyBaseUrls: [
     config.get("jwt.publicKeyBaseUrl"),
     config.get("jwt.publicKeyBaseUrlFallback"),
