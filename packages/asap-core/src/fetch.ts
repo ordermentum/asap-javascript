@@ -40,9 +40,7 @@ export function createPublicKeyFetcher({
     })
   );
 
-  return async function getPublicKey(
-    keyId: string
-  ): Promise<string | undefined> {
+  return async function getPublicKey(keyId: string): Promise<string> {
     let value = cache.get<string>(keyId);
 
     if (value) {

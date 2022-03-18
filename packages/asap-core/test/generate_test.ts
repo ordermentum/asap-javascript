@@ -99,16 +99,6 @@ describe('createAuthHeaderGenerator', () => {
       expect(token).to.not.be.undefined;
     });
 
-    it('generates the same token if called twice within 9 minutes', () => {
-      const generator = createAuthHeaderGenerator(jwtConfig);
-
-      const firstToken = generateToken(generator);
-      currentTime += 9 * 60 * 1000;
-      const secondToken = generateToken(generator);
-
-      expect(firstToken).to.deep.equal(secondToken);
-    });
-
     it('generates unique tokens if called after 9 minutes', () => {
       const generator = createAuthHeaderGenerator(jwtConfig);
 
@@ -117,17 +107,6 @@ describe('createAuthHeaderGenerator', () => {
       const secondToken = generateToken(generator);
 
       expect(firstToken).not.to.equal(secondToken);
-    });
-
-    it('generates the same token if called twice within custom age', () => {
-      jwtConfig.tokenMaxAgeMs = 10 * 60 * 1000 - 1;
-      const generator = createAuthHeaderGenerator(jwtConfig);
-
-      const firstToken = generateToken(generator);
-      currentTime += 10 * 60 * 1000 - 1;
-      const secondToken = generateToken(generator);
-
-      expect(firstToken).to.deep.equal(secondToken);
     });
 
     it('fails if missing keyId', () => {
@@ -157,7 +136,7 @@ describe('createAuthHeaderGenerator', () => {
     it('fails if invalid privateKey', () => {
       jwtConfig.privateKey = 'this is not a valid key';
 
-      expect(() => createAuthHeaderGenerator(jwtConfig)).to.throw(
+      expect(() => createAuthHeaderGenerator(jwtConfig)()).to.throw(
         /PEM.*no start line/
       );
     });
@@ -165,7 +144,7 @@ describe('createAuthHeaderGenerator', () => {
     it('fails if missing audience', () => {
       delete jwtConfig.audience;
 
-      expect(() => createAuthHeaderGenerator(jwtConfig)).to.throw(
+      expect(() => createAuthHeaderGenerator(jwtConfig)()).to.throw(
         /audience must be set/
       );
     });
