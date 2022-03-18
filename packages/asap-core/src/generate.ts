@@ -28,15 +28,6 @@ export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
 
   // The max age is less than the expiry so that we don't ever reuse a nearly expired token
   const tokenExpiryMs = jwtConfig.tokenExpiryMs || 10 * 60 * 1000;
-  const tokenMaxAgeMs = jwtConfig.tokenMaxAgeMs || 9 * 60 * 1000;
-
-  let lastUpdated = 0;
-  let authHeader: string = '';
-
-  function isExpired(now: number) {
-    const tokenAge = now - lastUpdated;
-    return tokenAge > tokenMaxAgeMs;
-  }
 
   function generateStandardClaims(now: number) {
     return {
@@ -60,10 +51,6 @@ export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
       ...additionalClaims,
     };
 
-    if (!isExpired(now)) {
-      return authHeader;
-    }
-
     const options: SignOptions = {
       algorithm: 'RS256',
       header: {
@@ -72,8 +59,11 @@ export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
       },
     };
 
-    authHeader = `Bearer ${jsonWebToken.sign(claims, privateKey, options)}`;
-    lastUpdated = now;
+    const authHeader = `Bearer ${jsonWebToken.sign(
+      claims,
+      privateKey,
+      options
+    )}`;
     return authHeader;
   }
 
