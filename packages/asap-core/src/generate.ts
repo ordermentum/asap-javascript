@@ -13,8 +13,8 @@ export type AuthHeaderConfig = {
   audience: string;
   tokenExpiryMs?: number;
   tokenMaxAgeMs?: number;
-  additionalClaims?: any;
   subject?: string;
+  additionalClaims?: any;
 };
 export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
   assertDefined(jwtConfig.privateKey, 'jwtConfig.privateKey must be set');
@@ -29,8 +29,6 @@ export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
   // The max age is less than the expiry so that we don't ever reuse a nearly expired token
   const tokenExpiryMs = jwtConfig.tokenExpiryMs || 10 * 60 * 1000;
   const tokenMaxAgeMs = jwtConfig.tokenMaxAgeMs || 9 * 60 * 1000;
-
-  const additionalClaims = jwtConfig.additionalClaims || {};
 
   let lastUpdated = 0;
   let authHeader: string = '';
@@ -51,16 +49,21 @@ export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
       jti: crypto.randomBytes(20).toString('hex'),
     };
   }
+  const globalClaims = jwtConfig?.additionalClaims ?? {};
 
-  function getOrGenerateAuthHeader() {
+  function getOrGenerateAuthHeader(additionalClaims: any = {}) {
     const now = Date.now();
+
+    const claims = {
+      ...generateStandardClaims(now),
+      ...globalClaims,
+      ...additionalClaims,
+    };
+
     if (!isExpired(now)) {
       return authHeader;
     }
-    const claims = {
-      ...generateStandardClaims(now),
-      ...additionalClaims,
-    };
+
     const options: SignOptions = {
       algorithm: 'RS256',
       header: {
@@ -68,13 +71,11 @@ export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
         kid: jwtConfig.keyId,
       },
     };
+
     authHeader = `Bearer ${jsonWebToken.sign(claims, privateKey, options)}`;
     lastUpdated = now;
     return authHeader;
   }
-
-  // Fail if we cannot generate an auth header
-  getOrGenerateAuthHeader();
 
   return getOrGenerateAuthHeader;
 }
