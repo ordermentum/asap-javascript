@@ -1,32 +1,24 @@
 {
-    "compilerOptions": {
-      "lib": [
-        "es2019"
-      ],
-      "target": "es2017",
-      "module": "commonjs",
-      "allowJs": false,
-      "declaration": true,
-      "outDir": "build",
-      "strict": true,
-      "alwaysStrict": true,
-      "noUnusedLocals": true,
-      "noImplicitAny": true,
-      "noImplicitThis": true,
-      "resolveJsonModule": true,
-      "noUnusedParameters": true,
-      "noImplicitReturns": true,
-      "noFallthroughCasesInSwitch": true,
-      "allowSyntheticDefaultImports": true,
-      "moduleResolution": "node",
-      "esModuleInterop": true
-    },
-    "include": [
-      "src"
-, "../asap-core/src/errors.ts"    ],
-    "exclude": [
-      "build",
-      "node_modules"
-    ]
-  }
-  
+  "compilerOptions": {
+    "lib": ["es2021"],
+    "target": "es2017",
+    "module": "commonjs",
+    "allowJs": false,
+    "declaration": true,
+    "outDir": "build",
+    "strict": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "resolveJsonModule": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true
+  },
+  "include": ["src", "../asap-core/src/errors.ts"],
+  "exclude": ["build", "node_modules"]
+}

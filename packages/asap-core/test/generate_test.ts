@@ -23,8 +23,11 @@ describe('createAuthHeaderGenerator', () => {
     time.restore();
   });
 
-  function generateToken(generator = createAuthHeaderGenerator(jwtConfig)) {
-    const authHeader = generator();
+  function generateToken(
+    generator = createAuthHeaderGenerator(jwtConfig),
+    additionalClaims = {}
+  ) {
+    const authHeader = generator(additionalClaims);
     const token = parseAuthHeader(authHeader);
     return token;
   }
@@ -167,13 +170,24 @@ describe('createAuthHeaderGenerator', () => {
       );
     });
 
-    it('supports additional claims', () => {
+    it('supports additional claims in config', () => {
       jwtConfig.additionalClaims = {
         myCustomClaim: 'foo bar',
       };
 
-      const token = generateToken();
+      const generator = createAuthHeaderGenerator(jwtConfig);
+      const token = generateToken(generator);
+      expect(token.myCustomClaim).to.eql('foo bar');
+    });
 
+    it('supports additional claims in generator', () => {
+      const additionalClaims = {
+        myCustomClaim: 'foo bar',
+      };
+
+      const generator = createAuthHeaderGenerator(jwtConfig);
+      const header = generator(additionalClaims);
+      const token = parseAuthHeader(header);
       expect(token.myCustomClaim).to.eql('foo bar');
     });
   });
