@@ -2,7 +2,7 @@ import assert from 'assert';
 import jsonWebToken, { JwtPayload, Algorithm } from 'jsonwebtoken';
 
 import axios from 'axios';
-import createPublicKeyFetcher from './fetch';
+import createPublicKeyFetcher from './fetchers/http';
 import { AsapAuthenticationError } from './errors';
 
 const ALLOWED_ALGORITHMS: Algorithm[] = [
