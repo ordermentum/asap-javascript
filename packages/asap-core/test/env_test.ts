@@ -1,7 +1,7 @@
 import { describe, afterEach, beforeEach } from 'mocha';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { getKey, environmentFetcher } from '../src/fetchers/env';
+import { getKey, createPublicKeyFetcher } from '../src/fetchers/env';
 
 describe('env', () => {
   let jwtConfig;
@@ -26,7 +26,7 @@ describe('env', () => {
   describe('environmentFetcher', () => {
     it('correclty env value', async () => {
       process.env.APP_TEST_KEY = '123';
-      const fetcher = environmentFetcher('APP_');
+      const fetcher = createPublicKeyFetcher('APP_');
       const key = await fetcher('test/key');
       expect(key).to.equal('123');
     });

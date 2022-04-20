@@ -3,11 +3,11 @@ export const getKey = (prefix: string, keyId: string) => {
   return `${prefix}${key}`;
 };
 
-export const environmentFetcher =
+export const createPublicKeyFetcher =
   (prefix: string = 'PRIVATE_') =>
   async (keyId: string): Promise<string> => {
     const key = getKey(prefix, keyId);
     return process.env[key] || '';
   };
 
-export default environmentFetcher;
+export default createPublicKeyFetcher;
