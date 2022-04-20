@@ -58,3 +58,13 @@ npm publish
 git push
 git push --tags
 ```
+
+## Generating keys for use
+
+```
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -pubout -out public.pem
+
+# get public key as base64
+cat public.pem | base64
+```

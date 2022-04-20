@@ -4,10 +4,14 @@ export const getKey = (prefix: string, keyId: string) => {
 };
 
 export const createPublicKeyFetcher =
-  (prefix: string = 'PRIVATE_') =>
+  (prefix: string = 'PRIVATE_', base64 = false) =>
   async (keyId: string): Promise<string> => {
     const key = getKey(prefix, keyId);
-    return process.env[key] || '';
+    const value = process.env[key];
+    if (value && base64) {
+      return Buffer.from(value, 'base64').toString('ascii');
+    }
+    return value ?? '';
   };
 
 export default createPublicKeyFetcher;
