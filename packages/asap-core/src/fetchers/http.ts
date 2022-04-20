@@ -1,8 +1,8 @@
 import assert from 'assert';
 import { URL } from 'url';
 import axios from 'axios';
-import cache from './cache';
-import { AsapAuthenticationError } from './errors';
+import cache from '../cache';
+import { AsapAuthenticationError } from '../errors';
 
 function parseUrlArray(array: string[]) {
   const urls = array.map(urlString => new URL(urlString));
