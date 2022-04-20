@@ -24,9 +24,16 @@ describe('env', () => {
   });
 
   describe('environmentFetcher', () => {
-    it('correclty env value', async () => {
+    it('correctly loads env value', async () => {
       process.env.APP_TEST_KEY = '123';
       const fetcher = createPublicKeyFetcher('APP_');
+      const key = await fetcher('test/key');
+      expect(key).to.equal('123');
+    });
+
+    it('correctly decodes base64 env value', async () => {
+      process.env.APP_TEST_KEY = 'MTIz';
+      const fetcher = createPublicKeyFetcher('APP_', true);
       const key = await fetcher('test/key');
       expect(key).to.equal('123');
     });
