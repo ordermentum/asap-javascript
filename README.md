@@ -12,6 +12,7 @@ This is a mono repo with
 
 - @ordermentum/asap-core a generic authenticator function and header generation library for usage in http clients
 - @ordermentum/express-asap An [Express](https://expressjs.com/) middleware
+- @ordermentum/hapi-asap A [hapi](https://hapi.dev/) plugin
 - @ordermentum/axios-asap interceptor for axios
 
 This started as a forked from a no longer public bitbucket repo - all credit to Atlassian.
