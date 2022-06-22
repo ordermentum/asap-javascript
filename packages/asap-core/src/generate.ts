@@ -4,7 +4,7 @@ import jsonWebToken, { SignOptions } from 'jsonwebtoken';
 import path from 'path';
 
 const testPrivateKey = readFileSync(
-  path.join(__dirname, '../keys_for_test/private_key_for_tests.pem')
+  path.join(__dirname, './keys_for_test/private_key_for_tests.pem')
 ).toString('utf-8');
 
 function assertDefined(value: string | null | undefined, message: string) {
