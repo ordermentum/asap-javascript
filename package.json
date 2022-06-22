@@ -19,7 +19,8 @@
     "typescript": "4.6.2"
   },
   "scripts": {
-    "build": "turbo run build --parallel"
+    "build": "turbo run build --parallel",
+    "lint": "turbo run lint --parallel -- --fix"
   },
   "dependencies": {},
   "workspaces": [

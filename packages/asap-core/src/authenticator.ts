@@ -1,9 +1,9 @@
 import assert from 'assert';
 import jsonWebToken, { JwtPayload, Algorithm } from 'jsonwebtoken';
-
 import axios from 'axios';
 import createPublicKeyFetcher from './fetchers/http';
 import { AsapAuthenticationError } from './errors';
+import { createTestPublicKeyFetcher } from './fetchers/file';
 
 const ALLOWED_ALGORITHMS: Algorithm[] = [
   'RS256',
@@ -94,6 +94,12 @@ export type KeyLoader = (keyId: string) => Promise<string>;
 export type AuthenticatorOptions = {
   resourceServerAudience: string;
   maxLifeTimeSeconds: number;
+  /**
+   * Insecure mode forces the authenticator to use a static public key for decryption
+   * This mode helps services to test authentication flows
+   * @default false
+   */
+  insecureMode?: boolean;
 } & {
   publicKeyBaseUrls?: string[];
   keyLoader?: KeyLoader;
@@ -104,8 +110,11 @@ export function createAsapAuthenticator({
   keyLoader,
   resourceServerAudience,
   maxLifeTimeSeconds = DEFAULT_MAX_LIFETIME_SECONDS,
+  insecureMode = false,
 }: AuthenticatorOptions) {
   assert.ok(resourceServerAudience, 'resourceServerAudience must be set');
+
+  if (insecureMode) keyLoader = createTestPublicKeyFetcher(); // eslint-disable-line no-param-reassign
 
   let getPublicKey: KeyLoader;
 
