@@ -15,11 +15,11 @@
     "mocha-sinon": "2.1.2",
     "ts-node": "10.7.0",
     "ts-node-dev": "1.1.8",
-    "turbo": "1.1.6",
+    "turbo": "1.2.16",
     "typescript": "4.6.2"
   },
   "scripts": {
-    "build": "turbo run build --parallel",
+    "build": "turbo run build --filter=@ordermentum/asap-core && turbo run build --filter=!@ordermentum/asap-core --parallel",
     "lint": "turbo run lint --parallel -- --fix"
   },
   "dependencies": {},
