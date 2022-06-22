@@ -20,7 +20,8 @@
   },
   "scripts": {
     "build": "turbo run build --filter=@ordermentum/asap-core && turbo run build --filter=!@ordermentum/asap-core --parallel",
-    "lint": "turbo run lint --parallel -- --fix"
+    "lint": "turbo run lint --parallel -- --fix",
+    "test": "turbo run test"
   },
   "dependencies": {},
   "workspaces": [

@@ -56,7 +56,7 @@ import { createAsapAuthenticator } from "@ordermentum/asap-core";
 import createPublicKeyFetcher from "@ordermentum/asap-core/fetchers/file";
 
 const authenticateAsapHeader = createAsapAuthenticator({
-  keyLoader: createPublicKeyFetcher(process.env.PUBLIC_KEYS_DIRECTORY),
+  keyLoader: createPublicKeyFetcher(config.get("publicKeysDirectory")),
   resourceServerAudience: config.get("jwt.audience"),
 });
 
