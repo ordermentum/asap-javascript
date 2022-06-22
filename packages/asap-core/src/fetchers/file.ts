@@ -23,7 +23,7 @@ export const createPublicKeyFetcher =
  * The idea is when the library is initiated in insecure mode,
  * it uses a pair of test keys and does not rely on the calling service
  * to provide a key pair.
- * We'll be ignore arguments passed to this key loader
+ * We'll ignore arguments passed to this key loader
  * @requires Authenticator (../authenticator) to be initiated in insecure mode
  * @note ONLY FOR USE IN INSECURE MODE
  */
