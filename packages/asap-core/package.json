@@ -1,6 +1,6 @@
 {
   "name": "@ordermentum/asap-core",
-  "version": "0.1.5",
+  "version": "0.1.8-beta",
   "main": "build/index.js",
   "files": [
     "build/*"
@@ -27,7 +27,7 @@
     "typescript": "4.6.2"
   },
   "scripts": {
-    "build": "rm -rf build && tsc",
+    "build": "rm -rf build && tsc && cp -r ./src/keys_for_test build",
     "lint": "eslint '**/*.{ts,js}'",
     "test": "NODE_ENV=test mocha -r ts-node/register/transpile-only 'test/**/*.{ts,js}'",
     "typecheck": "yarn tsc --noEmit"
