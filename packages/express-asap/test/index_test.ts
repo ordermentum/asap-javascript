@@ -46,8 +46,6 @@ describe('middleware', () => {
     const authHeader = createAuthHeaderGenerator(jwtConfig)();
     const res = await agent.get('/').set('Authorization', authHeader);
     expect(res.status).to.equal(200);
-    console.log('🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰');
-    console.log('res:', res);
     expect(res.text).to.equal('OK');
   });
 
