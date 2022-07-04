@@ -19,7 +19,9 @@
     "typescript": "4.6.2"
   },
   "scripts": {
-    "build": "turbo run build --filter=@ordermentum/asap-core && turbo run build --filter=!@ordermentum/asap-core --parallel"
+    "build": "turbo run build --filter=@ordermentum/asap-core && turbo run build --filter=!@ordermentum/asap-core --parallel",
+    "lint": "turbo run lint --parallel -- --fix",
+    "test": "turbo run test"
   },
   "dependencies": {},
   "workspaces": [

@@ -1,5 +1,11 @@
 import crypto from 'crypto';
+import { readFileSync } from 'fs';
 import jsonWebToken, { SignOptions } from 'jsonwebtoken';
+import path from 'path';
+
+const testPrivateKey = readFileSync(
+  path.join(__dirname, './keys_for_test/private_key_for_tests.pem')
+).toString('utf-8');
 
 function assertDefined(value: string | null | undefined, message: string) {
   if (value === undefined || value === null || value === '') {
@@ -15,8 +21,15 @@ export type AuthHeaderConfig = {
   tokenMaxAgeMs?: number;
   subject?: string;
   additionalClaims?: any;
+  /**
+   * Insecure mode forces the generator to use a static private key for encryption
+   * This mode helps services to test authentication flows
+   * @default false
+   */
+  insecureMode?: boolean;
 };
 export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
+  if (jwtConfig.insecureMode) jwtConfig.privateKey = testPrivateKey; // eslint-disable-line no-param-reassign
   assertDefined(jwtConfig.privateKey, 'jwtConfig.privateKey must be set');
   assertDefined(jwtConfig.keyId, 'jwtConfig.keyId must be set');
   assertDefined(jwtConfig.issuer, 'jwtConfig.issuer must be set');
