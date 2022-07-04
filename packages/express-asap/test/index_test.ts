@@ -46,7 +46,7 @@ describe('middleware', () => {
     const authHeader = createAuthHeaderGenerator(jwtConfig)();
     const res = await agent.get('/').set('Authorization', authHeader);
     expect(res.status).to.equal(200);
-    expect(res.text).to.equal('test');
+    expect(res.text).to.equal('OK');
   });
 
   it('accepts invalid token', async () => {

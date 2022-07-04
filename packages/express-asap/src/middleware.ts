@@ -17,14 +17,15 @@ export function createAsapAuthenticationMiddleware(opts: AuthenticatorOptions) {
 
   return function asapAuthenticationMiddleware(
     request: Request,
-    response: Response,
+    _: Response,
     next: NextFunction
   ) {
     const authHeader = request.headers.authorization;
     if (authHeader) {
       return authenticateAsapHeader(authHeader)
         .then(asapClaims => {
-          response.locals.asapClaims = asapClaims;
+          request.locals = request.locals ?? {};
+          request.locals.asapClaims = asapClaims;
           next();
         })
         .catch(error => {

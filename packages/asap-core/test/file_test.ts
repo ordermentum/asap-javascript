@@ -1,11 +1,9 @@
 import { describe, afterEach, beforeEach } from 'mocha';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { createPublicKeyFetcher } from '../src/fetchers/file';
+import { createPublicKeyFetcher, createTestPublicKeyFetcher } from '../src/fetchers/file';
 
 describe('file', () => {
-  let jwtConfig;
-  let currentTime;
   let time;
 
   beforeEach(() => {
@@ -33,5 +31,14 @@ describe('file', () => {
       }
       expect(e).to.exist;
     });
+
+    context('Insecure key loader', () => {
+      it('Loads the same static public key', async () => {
+        const fetcher = createTestPublicKeyFetcher();
+        const key1 = await fetcher('test/service_1');
+        const key2 = await fetcher('test/service_2');
+        expect(key1).to.eqls(key2);
+      });
+    })
   });
 });
