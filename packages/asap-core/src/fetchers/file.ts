@@ -17,19 +17,3 @@ export const createPublicKeyFetcher =
     const file = await fs.readFile(full);
     return file.toString('utf-8');
   };
-
-/**
- * Creates a fetcher that returns a static public key for testing
- * The idea is when the library is initiated in insecure mode,
- * it uses a pair of test keys and does not rely on the calling service
- * to provide a key pair.
- * We'll ignore arguments passed to this key loader
- * @requires Authenticator (../authenticator) to be initiated in insecure mode
- * @note ONLY FOR USE IN INSECURE MODE
- */
-export const createTestPublicKeyFetcher =
-  () =>
-  async (_keyId: string): Promise<string> =>
-    testPublicKey;
-
-export default createPublicKeyFetcher;

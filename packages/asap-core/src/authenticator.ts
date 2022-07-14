@@ -3,7 +3,7 @@ import jsonWebToken, { JwtPayload, Algorithm } from 'jsonwebtoken';
 import axios from 'axios';
 import createPublicKeyFetcher from './fetchers/http';
 import { AsapAuthenticationError } from './errors';
-import { createTestPublicKeyFetcher } from './fetchers/file';
+import { createStaticPublicKeyFetcher } from './fetchers/static';
 
 const ALLOWED_ALGORITHMS: Algorithm[] = [
   'RS256',
@@ -114,7 +114,7 @@ export function createAsapAuthenticator({
 }: AuthenticatorOptions) {
   assert.ok(resourceServerAudience, 'resourceServerAudience must be set');
 
-  if (insecureMode) keyLoader = createTestPublicKeyFetcher(); // eslint-disable-line no-param-reassign
+  if (insecureMode) keyLoader = createStaticPublicKeyFetcher(); // eslint-disable-line no-param-reassign
 
   let getPublicKey: KeyLoader;
 
