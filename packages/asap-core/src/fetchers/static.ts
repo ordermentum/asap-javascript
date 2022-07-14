@@ -5,7 +5,6 @@ const testPublicKey = readFileSync(
   path.join(__dirname, '../keys_for_test/public_key_for_tests.pem')
 ).toString('utf-8');
 
-
 /**
  * Creates a fetcher that returns a static public key for testing
  * The idea is when the library is initiated in insecure mode,

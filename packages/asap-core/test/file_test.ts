@@ -1,7 +1,10 @@
 import { describe, afterEach, beforeEach } from 'mocha';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { createPublicKeyFetcher, createTestPublicKeyFetcher } from '../src/fetchers/file';
+import {
+  createPublicKeyFetcher,
+  createTestPublicKeyFetcher,
+} from '../src/fetchers/file';
 
 describe('file', () => {
   let time;
@@ -39,6 +42,6 @@ describe('file', () => {
         const key2 = await fetcher('test/service_2');
         expect(key1).to.eqls(key2);
       });
-    })
+    });
   });
 });

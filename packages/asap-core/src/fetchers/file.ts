@@ -1,9 +1,5 @@
-import { promises as fs, existsSync, readFileSync } from 'fs';
+import { promises as fs, existsSync } from 'fs';
 import path from 'path';
-
-const testPublicKey = readFileSync(
-  path.join(__dirname, '../keys_for_test/public_key_for_tests.pem')
-).toString('utf-8');
 
 export const createPublicKeyFetcher =
   (directory: string) =>
