@@ -42,15 +42,17 @@ const implementation = (_server: Hapi.Server, options?: any) => {
 /**
  * Creates an hapi plugin to validate the authorization header
  * using the ASAP standard
+ * 
  *
  * @param opts AuthenticatorOptions
  *
  */
 const register = async (
   server: Hapi.Server,
-  _options: AuthenticatorOptions
+  options: AuthenticatorOptions
 ): Promise<void> => {
   server.auth.scheme('hapi-asap', implementation);
+  server.auth.strategy('hapi-asap', 'hapi-asap', options);
 };
 
 export const plugin: Hapi.Plugin<AuthenticatorOptions> = {
