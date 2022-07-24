@@ -42,7 +42,7 @@ const implementation = (_server: Hapi.Server, options?: any) => {
 /**
  * Creates an hapi plugin to validate the authorization header
  * using the ASAP standard
- * 
+ *
  *
  * @param opts AuthenticatorOptions
  *
