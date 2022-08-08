@@ -1,6 +1,6 @@
 {
   "name": "@ordermentum/hapi-asap",
-  "version": "0.1.2-beta",
+  "version": "0.1.2",
   "main": "build/index.js",
   "license": "MIT",
   "files": [
