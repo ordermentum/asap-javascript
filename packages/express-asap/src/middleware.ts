@@ -3,6 +3,7 @@ import {
   createAsapAuthenticator,
   AuthenticatorOptions,
 } from '@ordermentum/asap-core';
+import { JwtPayload } from 'jsonwebtoken';
 
 /**
  * Creates an express middleware to validate the authorization header
@@ -25,7 +26,7 @@ export function createAsapAuthenticationMiddleware(opts: AuthenticatorOptions) {
       return authenticateAsapHeader(authHeader)
         .then(asapClaims => {
           request.locals = request.locals ?? {};
-          request.locals.asapClaims = asapClaims;
+          request.locals.asapClaims = asapClaims as JwtPayload;
           next();
         })
         .catch(error => {

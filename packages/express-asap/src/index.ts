@@ -8,7 +8,7 @@ declare global {
     interface Request {
       locals?: {
         [key: string]: any;
-        asapClaims?: string | JwtPayload | null;
+        asapClaims?: JwtPayload | null;
       };
     }
   }
