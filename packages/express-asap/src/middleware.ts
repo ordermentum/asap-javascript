@@ -7,19 +7,19 @@ import { JwtPayload } from 'jsonwebtoken';
 
 export type ExpressAsapMiddlewareOptions = AuthenticatorOptions & {
   /**
-   * Set if you want this middleware 
+   * Set if you want this middleware
    * to invoke an error if it fails to authenticate
    * instead of passing the request on
    * @default false
    * @example - Routes that use this have to check for the presence of claims on the request
-   * 
+   *
    * //handler
    * if(!req.locals?.asapClaims) // Can check presence of nested claims
-   *  res.sendStatus(401); 
-   * 
+   *  res.sendStatus(401);
+   *
    */
   failEarly?: boolean;
-}
+};
 
 /**
  * Creates an express middleware to validate the authorization header
@@ -29,7 +29,9 @@ export type ExpressAsapMiddlewareOptions = AuthenticatorOptions & {
  * @returns Express middleware function
  *
  */
-export function createAsapAuthenticationMiddleware(opts: ExpressAsapMiddlewareOptions) {
+export function createAsapAuthenticationMiddleware(
+  opts: ExpressAsapMiddlewareOptions
+) {
   const authenticateAsapHeader = createAsapAuthenticator(opts);
 
   return function asapAuthenticationMiddleware(
@@ -46,10 +48,8 @@ export function createAsapAuthenticationMiddleware(opts: ExpressAsapMiddlewareOp
           next();
         })
         .catch(error => {
-          if(opts.failEarly)
-            next(error);
-          else
-            next();
+          if (opts.failEarly) next(error);
+          else next();
         });
     }
     return next();
