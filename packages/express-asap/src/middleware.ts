@@ -5,6 +5,22 @@ import {
 } from '@ordermentum/asap-core';
 import { JwtPayload } from 'jsonwebtoken';
 
+export type ExpressAsapMiddlewareOptions = AuthenticatorOptions & {
+  /**
+   * Set if you want this middleware 
+   * to invoke an error if it fails to authenticate
+   * instead of passing the request on
+   * @default false
+   * @example - Routes that use this have to check for the presence of claims on the request
+   * 
+   * //handler
+   * if(!req.locals?.asapClaims) // Can check presence of nested claims
+   *  res.sendStatus(401); 
+   * 
+   */
+  failEarly?: boolean;
+}
+
 /**
  * Creates an express middleware to validate the authorization header
  * using the ASAP standard
@@ -13,7 +29,7 @@ import { JwtPayload } from 'jsonwebtoken';
  * @returns Express middleware function
  *
  */
-export function createAsapAuthenticationMiddleware(opts: AuthenticatorOptions) {
+export function createAsapAuthenticationMiddleware(opts: ExpressAsapMiddlewareOptions) {
   const authenticateAsapHeader = createAsapAuthenticator(opts);
 
   return function asapAuthenticationMiddleware(
@@ -30,7 +46,10 @@ export function createAsapAuthenticationMiddleware(opts: AuthenticatorOptions) {
           next();
         })
         .catch(error => {
-          next(error);
+          if(opts.failEarly)
+            next(error);
+          else
+            next();
         });
     }
     return next();
