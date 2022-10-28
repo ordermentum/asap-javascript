@@ -1,6 +1,6 @@
 {
   "name": "@ordermentum/express-asap",
-  "version": "0.1.5-beta5",
+  "version": "0.2.0-beta1",
   "main": "build/index.js",
   "license": "MIT",
   "files": [
