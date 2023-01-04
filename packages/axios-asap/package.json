@@ -1,6 +1,6 @@
 {
   "name": "@ordermentum/axios-asap",
-  "version": "0.1.3-beta",
+  "version": "0.1.3",
   "main": "build/index.js",
   "files": [
     "build/*"
