@@ -12,8 +12,8 @@ function assertDefined(value: string | null | undefined, message: string) {
     throw new Error(message);
   }
 }
-export type AuthHeaderConfig = {
-  privateKey: string;
+
+type AuthHeaderConfigBase = {
   keyId: string;
   issuer: string;
   audience: string;
@@ -21,13 +21,30 @@ export type AuthHeaderConfig = {
   tokenMaxAgeMs?: number;
   subject?: string;
   additionalClaims?: any;
+};
+
+interface AuthHeaderConfigInsecure extends AuthHeaderConfigBase {
+  privateKey?: string;
   /**
    * Insecure mode forces the generator to use a static private key for encryption
    * This mode helps services to test authentication flows
    * @default false
    */
-  insecureMode?: boolean;
+  insecureMode: true;
 };
+
+interface AuthHeaderConfigSecure extends AuthHeaderConfigBase {
+  privateKey: string;
+  /**
+   * Insecure mode forces the generator to use a static private key for encryption
+   * This mode helps services to test authentication flows
+   * @default false
+   */
+  insecureMode?: false;
+};
+
+type AuthHeaderConfig = AuthHeaderConfigSecure | AuthHeaderConfigInsecure;
+
 export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
   if (jwtConfig.insecureMode) jwtConfig.privateKey = testPrivateKey; // eslint-disable-line no-param-reassign
   assertDefined(jwtConfig.privateKey, 'jwtConfig.privateKey must be set');
@@ -35,7 +52,7 @@ export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
   assertDefined(jwtConfig.issuer, 'jwtConfig.issuer must be set');
   assertDefined(jwtConfig.audience, 'jwtConfig.audience must be set');
 
-  const privateKey = jwtConfig.privateKey
+  const privateKey = (jwtConfig.privateKey as string)
     .replace(/\\n/g, '\n')
     .replace(/"/g, '');
 
