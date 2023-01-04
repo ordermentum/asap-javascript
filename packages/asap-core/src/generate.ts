@@ -39,7 +39,9 @@ interface AuthHeaderConfigSecure extends AuthHeaderConfigBase {
   privateKey: string;
 }
 
-type AuthHeaderConfig = AuthHeaderConfigSecure | AuthHeaderConfigInsecure;
+export type AuthHeaderConfig =
+  | AuthHeaderConfigSecure
+  | AuthHeaderConfigInsecure;
 
 export function createAuthHeaderGenerator(jwtConfig: AuthHeaderConfig) {
   if (jwtConfig.insecureMode) jwtConfig.privateKey = testPrivateKey; // eslint-disable-line no-param-reassign
