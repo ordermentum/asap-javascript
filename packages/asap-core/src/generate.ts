@@ -14,6 +14,7 @@ function assertDefined(value: string | null | undefined, message: string) {
 }
 
 type AuthHeaderConfigBase = {
+  privateKey?: string;
   keyId: string;
   issuer: string;
   audience: string;
@@ -21,27 +22,22 @@ type AuthHeaderConfigBase = {
   tokenMaxAgeMs?: number;
   subject?: string;
   additionalClaims?: any;
+  /**
+   * Insecure mode forces the generator to use a static private key for encryption
+   * This mode helps services to test authentication flows
+   * @default false
+   */
+  insecureMode?: boolean;
 };
 
 interface AuthHeaderConfigInsecure extends AuthHeaderConfigBase {
-  privateKey?: string;
-  /**
-   * Insecure mode forces the generator to use a static private key for encryption
-   * This mode helps services to test authentication flows
-   * @default false
-   */
   insecureMode: true;
-};
+}
 
 interface AuthHeaderConfigSecure extends AuthHeaderConfigBase {
-  privateKey: string;
-  /**
-   * Insecure mode forces the generator to use a static private key for encryption
-   * This mode helps services to test authentication flows
-   * @default false
-   */
   insecureMode?: false;
-};
+  privateKey: string;
+}
 
 type AuthHeaderConfig = AuthHeaderConfigSecure | AuthHeaderConfigInsecure;
 
