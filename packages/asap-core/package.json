@@ -1,6 +1,6 @@
 {
   "name": "@ordermentum/asap-core",
-  "version": "0.1.8-beta2",
+  "version": "0.1.9",
   "main": "build/index.js",
   "files": [
     "build/*"
