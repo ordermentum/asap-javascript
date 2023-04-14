@@ -585,16 +585,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@ordermentum/asap-core@*":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@ordermentum/asap-core/-/asap-core-0.1.7.tgz#fd7cabc0cec15db7bc69a003d1cfa95301c901fc"
-  integrity sha512-R0B5p4PRJq0xnjj3Zr9d+Z2t6Cylj2R3WBAsRS9bonAfLylsUZDoKcC4PgJcFHhLvqBbETLjVPJv8fOdUF1vmQ==
-  dependencies:
-    axios "^0.26.1"
-    express "^4.17.3"
-    jsonwebtoken "^8.5.1"
-    node-cache "^5.1.2"
-
 "@sideway/address@^4.1.3":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.4.tgz#03dccebc6ea47fdc226f7d3d1ad512955d4783f0"
