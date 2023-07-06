@@ -1,6 +1,6 @@
 {
   "name": "@ordermentum/hapi-asap",
-  "version": "0.1.2",
+  "version": "0.2.0-beta",
   "main": "build/index.js",
   "license": "MIT",
   "files": [
@@ -9,7 +9,6 @@
   "devDependencies": {
     "@ordermentum/asap-test-helpers": "*",
     "@types/chai": "^4.3.0",
-    "@types/hapi__hapi": "^20.0.10",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/mocha": "^9.1.0",
     "@types/node": "^17.0.21",
@@ -35,8 +34,10 @@
   },
   "dependencies": {
     "@hapi/boom": "^10.0.0",
-    "@hapi/hapi": "^20.2.2",
+    "@hapi/hapi": "*",
     "@ordermentum/asap-core": "*",
+    "@ordermentum/auth-driver": "^5.5.1",
+    "@ordermentum/auth-middleware": "2.3.0-beta",
     "axios": "^0.26.1",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1"
