@@ -55,9 +55,15 @@ const register = async (
   server.auth.strategy('hapi-asap', 'hapi-asap', options);
 };
 
-export const plugin: Hapi.Plugin<AuthenticatorOptions> = {
+const plugin: Hapi.Plugin<AuthenticatorOptions> = {
   register,
   pkg: { name: 'ASAP Authentication', version: '0.1.0' },
 };
+
+export {
+  register, 
+  AuthenticatorOptions,
+  plugin
+}
 
 export default plugin;
