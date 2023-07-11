@@ -47,10 +47,10 @@ const implementation = (_server: Hapi.Server, options?: any) => {
  * @param opts AuthenticatorOptions
  *
  */
-const register = async (
+const register = (
   server: Hapi.Server,
   options: AuthenticatorOptions
-): Promise<void> => {
+) => {
   server.auth.scheme('hapi-asap', implementation);
   server.auth.strategy('hapi-asap', 'hapi-asap', options);
 };
