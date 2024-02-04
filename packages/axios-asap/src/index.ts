@@ -2,7 +2,11 @@ import {
   createAuthHeaderGenerator,
   AuthHeaderConfig,
 } from '@ordermentum/asap-core';
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import http from 'http';
 import https from 'https';
 
@@ -10,7 +14,7 @@ export const createAsapInterceptor = (authConfig: AuthHeaderConfig) => {
   const headerGenerator = createAuthHeaderGenerator({
     ...authConfig,
   });
-  return (config: AxiosRequestConfig) => {
+  return (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const header = headerGenerator();
     const headers = config.headers ?? {};
     headers.Authorization = header;
@@ -67,7 +71,6 @@ export const createClient = (
   });
 
   const client = axios.create(axiosCreateOpts);
-  // @ts-ignore
   client.interceptors.request.use(asapInterceptor);
   serviceToClientMap.set(issuerServiceKey, client);
 

@@ -1,6 +1,6 @@
 {
   "name": "@ordermentum/express-asap",
-  "version": "0.2.0-beta1",
+  "version": "0.3.0",
   "main": "build/index.js",
   "license": "MIT",
   "files": [
@@ -34,8 +34,8 @@
     "typecheck": "yarn tsc --noEmit"
   },
   "dependencies": {
-    "@ordermentum/asap-core": "*",
-    "axios": "^0.26.1",
+    "@ordermentum/asap-core": "0.2.0",
+    "axios": "^1.6.7",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1"
   }
