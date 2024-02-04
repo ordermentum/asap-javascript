@@ -47,10 +47,7 @@ const implementation = (_server: Hapi.Server, options?: any) => {
  * @param opts AuthenticatorOptions
  *
  */
-const register = (
-  server: Hapi.Server,
-  options: AuthenticatorOptions
-) => {
+const register = (server: Hapi.Server, options: AuthenticatorOptions) => {
   server.auth.scheme('hapi-asap', implementation);
   server.auth.strategy('hapi-asap', 'hapi-asap', options);
 };
@@ -60,10 +57,6 @@ const plugin: Hapi.Plugin<AuthenticatorOptions> = {
   pkg: { name: 'ASAP Authentication', version: '0.1.0' },
 };
 
-export {
-  register, 
-  AuthenticatorOptions,
-  plugin
-}
+export { register, AuthenticatorOptions, plugin };
 
 export default plugin;
