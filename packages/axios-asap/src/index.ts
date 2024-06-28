@@ -20,10 +20,18 @@ export const createAsapInterceptor = (authConfig: AuthHeaderConfig) => {
 
 export const serviceToClientMap = new Map<string, AxiosInstance>();
 
-const getDefaultAxiosConfig = (): AxiosRequestConfig => ({
-  httpAgent: new http.Agent({ keepAlive: true }),
-  httpsAgent: new https.Agent({ keepAlive: true }),
-});
+let httpAgent: http.Agent;
+let httpsAgent: https.Agent;
+
+const getDefaultAxiosConfig = (): AxiosRequestConfig => {
+  if (!httpAgent) {
+    httpAgent = new http.Agent({ keepAlive: true });
+  }
+  if (!httpsAgent) {
+    httpsAgent = new https.Agent({ keepAlive: true });
+  }
+  return { httpAgent, httpsAgent }
+};
 
 export type Options = {
   issuer: string;
@@ -35,14 +43,17 @@ export type Options = {
 
 export const createClient = (
   { issuer, service, publicKey, privateKey }: Options,
-  authConfig: Pick<
-    AuthHeaderConfig,
-    'insecureMode' | 'additionalClaims' | 'tokenExpiryMs'
+  authConfig: Partial<
+    Pick<
+      AuthHeaderConfig,
+      'insecureMode' | 'additionalClaims' | 'tokenExpiryMs'
+    >
   > = {},
   axiosOptions: AxiosRequestConfig = {}
 ) => {
   const DEFAULT_TOKEN_EXPIRY_MS = 60 * 5 * 1000; // 5 minute expiry
-  const issuerServiceKey = `${issuer}:${service}`;
+  const headers = JSON.stringify(axiosOptions.headers ?? {});
+  const issuerServiceKey = `${issuer}:${service}:${headers}`;
 
   // Check if cache has a client
   if (!authConfig.insecureMode && serviceToClientMap.has(issuerServiceKey))
@@ -67,7 +78,7 @@ export const createClient = (
   });
 
   const client = axios.create(axiosCreateOpts);
-  // @ts-ignore
+
   client.interceptors.request.use(asapInterceptor);
   serviceToClientMap.set(issuerServiceKey, client);
 

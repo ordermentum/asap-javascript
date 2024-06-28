@@ -60,4 +60,96 @@ describe('createAuthHeaderGenerator', () => {
     expect(Object.keys(res?.config?.headers ?? {})).to.include('Authorization');
     expect(res?.config?.headers?.Authorization).to.include('Bearer');
   });
+
+  it('the cache is aware of headers and returns different clients for them', () => {
+    const client1 = createClient(
+      {
+        service: 'the-keyid',
+        issuer: 'an-issuer',
+        publicKey: 'public-key',
+        privateKey: privateKeyPem,
+      },
+      {
+        insecureMode: false,
+        additionalClaims: {
+          admin: true,
+          userId: '123',
+        },
+      },
+      {
+        headers: {
+          'x-custom-header': '1',
+        },
+      }
+    );
+    const client2 = createClient(
+      {
+        service: 'the-keyid',
+        issuer: 'an-issuer',
+        publicKey: 'public-key',
+        privateKey: privateKeyPem,
+      },
+      {
+        insecureMode: false,
+        additionalClaims: {
+          admin: true,
+          userId: '123',
+        },
+      },
+      {
+        headers: {
+          'x-custom-header': '2',
+        },
+      }
+    );
+    expect(client1).to.not.equal(client2);
+    expect(client1.defaults.headers['x-custom-header']).to.equal('1');
+    expect(client2.defaults.headers['x-custom-header']).to.equal('2');
+  });
+
+  it('the cache returns the same client if the headers match', () => {
+    const client1 = createClient(
+      {
+        service: 'the-keyid',
+        issuer: 'an-issuer',
+        publicKey: 'public-key',
+        privateKey: privateKeyPem,
+      },
+      {
+        insecureMode: false,
+        additionalClaims: {
+          admin: true,
+          userId: '123',
+        },
+      },
+      {
+        headers: {
+          'x-custom-header': '1',
+        },
+      }
+    );
+    const client2 = createClient(
+      {
+        service: 'the-keyid',
+        issuer: 'an-issuer',
+        publicKey: 'public-key',
+        privateKey: privateKeyPem,
+      },
+      {
+        insecureMode: false,
+        additionalClaims: {
+          admin: true,
+          userId: '123',
+        },
+      },
+      {
+        headers: {
+          'x-custom-header': '1',
+        },
+      }
+    );
+    expect(client1).to.equal(client2);
+    expect(client1.defaults.headers['x-custom-header']).to.equal('1');
+    expect(client2.defaults.headers['x-custom-header']).to.equal('1');
+  })
 });
