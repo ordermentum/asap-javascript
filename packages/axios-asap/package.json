@@ -9,7 +9,7 @@
   "devDependencies": {
     "@ordermentum/asap-test-helpers": "*",
     "@types/chai": "4.3.0",
-    "@types/express": "4.17.13",
+    "@types/express": "4.17.21",
     "@types/jsonwebtoken": "8.5.8",
     "@types/mocha": "9.1.0",
     "@types/moxios": "0.4.15",
