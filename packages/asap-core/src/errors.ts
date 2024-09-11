@@ -8,7 +8,7 @@ export class AsapError extends Error {
 
   logLevel: string;
 
-  cause?: any | null;
+  cause?: Error | string | null;
 
   constructor(message: string, cause?: any | null) {
     super(message);
@@ -16,13 +16,23 @@ export class AsapError extends Error {
     this.statusCode = 401;
     this.logLevel = 'warn';
     if (cause) {
-      this.cause = cause;
+      this.cause = cause.toString();
     }
   }
+
+  toString = () =>
+    [
+      this.errorKey ? `[${this.errorKey}]` : '',
+      `(${this.statusCode || -1}),
+      ${this.message}`,
+      this.cause ? `: (${this.cause})` : '',
+    ]
+      .filter(s => s!!)
+      .join('');
 }
 
 export class AsapAuthenticationError extends AsapError {
-  constructor(message: string, cause?: any | null) {
+  constructor(message: string, cause?: Error | string | null) {
     super(message, cause);
     this.errorKey = ASAP_INVALID_TOKEN;
   }
