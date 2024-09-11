@@ -22,15 +22,29 @@ describe('errors', () => {
       expect(errorWithStringrCause.message).to.equal(message);
       expect(errorWithStringrCause.cause).to.equal(causeString);
     });
+
     it('has a logLevel field', () => {
       expect(new AsapError('no keys', '').logLevel).to.be.a('string');
     });
     it('has a statusCode field', () => {
       expect(new AsapError('no keys', '').statusCode).to.be.a('number');
     });
+
     it(`includes its message in its string represenation`, () => {
       const message = 'there is nothing';
       expect(new AsapError(message, null).toString()).to.include(message);
+    });
+    it(`includes its cause in its string represenation`, () => {
+      const message = 'there is something wrong';
+      const causeString = 'expected 1 item, got 59';
+      const causeError = new RangeError(causeString);
+
+      expect(new AsapError(message, causeString).toString()).to.include(
+        causeString
+      );
+      expect(new AsapError(message, causeError).toString()).to.include(
+        causeString
+      );
     });
   });
 });
