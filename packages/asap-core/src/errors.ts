@@ -4,7 +4,9 @@ const ASAP_UNAUTHORIZED_ISSUER = 'asap-unauthorized-issuer';
 const ASAP_ERROR_CLASS_SYMBOL = Symbol('asapError');
 
 export const isAsapError = (error: any) =>
-  error != null && error.isAsapError === ASAP_ERROR_CLASS_SYMBOL;
+  error !== undefined &&
+  error !== null &&
+  error.isAsapError === ASAP_ERROR_CLASS_SYMBOL;
 
 export class AsapError extends Error {
   errorKey?: string;
@@ -47,7 +49,7 @@ export class AsapAuthenticationError extends AsapError {
 }
 
 export class AsapAuthorizationError extends AsapError {
-  constructor(message: string, cause?: any | null) {
+  constructor(message: string, cause?: Error | string | null) {
     super(message, cause);
     this.errorKey = ASAP_UNAUTHORIZED_ISSUER;
   }
