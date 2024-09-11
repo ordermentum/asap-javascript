@@ -37,7 +37,7 @@ export class AsapError extends Error {
       `${this.message}`,
       this.cause ? `: (${this.cause})` : '',
     ]
-      .filter(s => s!!)
+      .filter(s => !!s)
       .join('');
 }
 
