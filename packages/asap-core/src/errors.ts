@@ -3,10 +3,10 @@ const ASAP_UNAUTHORIZED_ISSUER = 'asap-unauthorized-issuer';
 
 const ASAP_ERROR_CLASS_SYMBOL = Symbol('asapError');
 
-export const isAsapError = (error: any) =>
-  error !== undefined &&
-  error !== null &&
-  error.isAsapError === ASAP_ERROR_CLASS_SYMBOL;
+export const isAsapError = (item: any) =>
+  item !== undefined &&
+  item !== null &&
+  item.isAsapError === ASAP_ERROR_CLASS_SYMBOL;
 
 export class AsapError extends Error {
   errorKey?: string;
