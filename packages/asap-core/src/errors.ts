@@ -10,7 +10,7 @@ export class AsapError extends Error {
 
   cause?: any | null;
 
-  constructor(message: string, cause: any | null) {
+  constructor(message: string, cause?: any | null) {
     super(message);
     this.name = this.constructor.name;
     this.statusCode = 401;
