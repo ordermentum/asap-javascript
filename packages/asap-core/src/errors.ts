@@ -1,6 +1,11 @@
 const ASAP_INVALID_TOKEN = 'asap-invalid-token';
 const ASAP_UNAUTHORIZED_ISSUER = 'asap-unauthorized-issuer';
 
+const ASAP_ERROR_CLASS_SYMBOL = Symbol('asapError');
+
+export const isAsapError = (error: any) =>
+  error != null && error.isAsapError === ASAP_ERROR_CLASS_SYMBOL;
+
 export class AsapError extends Error {
   errorKey?: string;
 
@@ -10,9 +15,12 @@ export class AsapError extends Error {
 
   cause?: Error | string | null;
 
+  isAsapError: symbol;
+
   constructor(message: string, cause?: any | null) {
     super(message);
     this.name = this.constructor.name;
+    this.isAsapError = ASAP_ERROR_CLASS_SYMBOL;
     this.statusCode = 401;
     this.logLevel = 'warn';
     if (cause) {

@@ -1,8 +1,12 @@
 import { describe } from 'mocha';
 import { expect } from 'chai';
-// import sinon from 'sinon';
 
-import { AsapError } from '../src/errors';
+import {
+  AsapError,
+  AsapAuthenticationError,
+  AsapAuthorizationError,
+  isAsapError,
+} from '../src/errors';
 
 describe('errors', () => {
   describe('AsapError', () => {
@@ -45,6 +49,20 @@ describe('errors', () => {
       expect(new AsapError(message, causeError).toString()).to.include(
         causeString
       );
+    });
+  });
+
+  describe('AsapError', () => {
+    it('returns true for AsapError instances', () => {
+      expect(isAsapError(new AsapError(''))).to.be.true;
+    });
+    it('returns true for AsapError class children', () => {
+      expect(isAsapError(new AsapAuthenticationError(''))).to.be.true;
+      expect(isAsapError(new AsapAuthorizationError(''))).to.be.true;
+    });
+    it('returns false for other error classes', () => {
+      expect(isAsapError(new Error(''))).to.be.false;
+      expect(isAsapError(new RangeError(''))).to.be.false;
     });
   });
 });
