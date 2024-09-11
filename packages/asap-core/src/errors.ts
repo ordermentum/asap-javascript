@@ -35,10 +35,10 @@ export class AsapError extends Error {
       this.errorKey ? `[${this.errorKey}]` : '',
       `(${this.statusCode || -1})`,
       `${this.message}`,
-      this.cause ? `: (${this.cause})` : '',
+      this.cause ? `(${this.cause})` : '',
     ]
       .filter(s => !!s)
-      .join('');
+      .join(' ');
 }
 
 export class AsapAuthenticationError extends AsapError {
