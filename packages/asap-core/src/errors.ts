@@ -16,7 +16,7 @@ export class AsapError extends Error {
     this.statusCode = 401;
     this.logLevel = 'warn';
     if (cause) {
-      this.cause = cause.toString();
+      this.cause = cause;
     }
   }
 
