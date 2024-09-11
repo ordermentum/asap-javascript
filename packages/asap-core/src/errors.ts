@@ -33,8 +33,8 @@ export class AsapError extends Error {
   toString = () =>
     [
       this.errorKey ? `[${this.errorKey}]` : '',
-      `(${this.statusCode || -1}),
-      ${this.message}`,
+      `(${this.statusCode || -1})`,
+      `${this.message}`,
       this.cause ? `: (${this.cause})` : '',
     ]
       .filter(s => s!!)
