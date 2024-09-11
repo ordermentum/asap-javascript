@@ -19,7 +19,7 @@ export class AsapError extends Error {
 
   isAsapError: symbol;
 
-  constructor(message: string, cause?: any | null) {
+  constructor(message: string, cause?: Error | string | null) {
     super(message);
     this.name = this.constructor.name;
     this.isAsapError = ASAP_ERROR_CLASS_SYMBOL;
