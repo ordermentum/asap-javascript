@@ -137,7 +137,7 @@ describe('createAuthHeaderGenerator', () => {
       jwtConfig.privateKey = 'this is not a valid key';
 
       expect(() => createAuthHeaderGenerator(jwtConfig)()).to.throw(
-        /PEM.*no start line/
+        /DECODER routines::unsupported/
       );
     });
 
