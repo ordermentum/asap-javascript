@@ -30,7 +30,7 @@ const getDefaultAxiosConfig = (): AxiosRequestConfig => {
   if (!httpsAgent) {
     httpsAgent = new https.Agent({ keepAlive: true });
   }
-  return { httpAgent, httpsAgent }
+  return { httpAgent, httpsAgent };
 };
 
 export type Options = {
