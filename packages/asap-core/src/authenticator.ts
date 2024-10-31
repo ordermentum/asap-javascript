@@ -153,8 +153,14 @@ export function createAsapAuthenticator({
     const keyId = unverifiedJwt.header.kid;
     const issuer = payload.iss ?? '';
 
+    if (issuer === '') {
+      // most likely not an ASAP token as it doesn't have an issuer for us to look up against
+      return null;
+    }
+
     if (!keyId) {
-      throw new AsapAuthenticationError('mising kid header');
+      // most likely not an ASAP token as it doesn't have a keyId for us to look up against
+      return null;
     }
 
     validateIssuerAndKeyId(issuer, keyId);
