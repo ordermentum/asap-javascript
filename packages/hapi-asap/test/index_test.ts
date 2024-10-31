@@ -9,7 +9,6 @@ async function init() {
   const server = Hapi.server({
     port: 10000,
     host: 'localhost',
-    plugins: [],
   });
 
   await server.register({
