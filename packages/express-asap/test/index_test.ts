@@ -8,13 +8,22 @@ import createAsapAuthenticationMiddleware from '../src/middleware';
 import createAsapIssuerWhitelistMiddleware from '../src/whitelist_middleware';
 
 const app = express();
-app.use(
-  createAsapAuthenticationMiddleware({
-    keyLoader: (_key: string) => Promise.resolve(publicKey),
-    resourceServerAudience: 'test',
-    maxLifeTimeSeconds: 60,
-  })
-);
+app
+  .use(
+    createAsapAuthenticationMiddleware({
+      keyLoader: (_key: string) => Promise.resolve(publicKey),
+      resourceServerAudience: 'test',
+      maxLifeTimeSeconds: 60,
+    })
+  )
+  .use((req, res, next) => {
+    // @ts-ignore
+    if (req.headers.authorization && req.locals?.asapClaims === undefined) {
+      res.status(401).send('Did not authenticate');
+    } else {
+      next();
+    }
+  });
 
 app.get('/', (_req, res) => {
   res.status(200);
@@ -43,7 +52,7 @@ describe('middleware', () => {
       tokenExpiryMs: 60 * 1000,
     };
 
-    const authHeader = createAuthHeaderGenerator(jwtConfig)();
+    const authHeader = createAuthHeaderGenerator(jwtConfig)({ admin: true });
     const res = await agent.get('/').set('Authorization', authHeader);
     expect(res.status).to.equal(200);
     expect(res.text).to.equal('OK');
@@ -58,7 +67,7 @@ describe('middleware', () => {
       tokenExpiryMs: 60 * 1000,
     };
 
-    const authHeader = createAuthHeaderGenerator(jwtConfig)();
+    const authHeader = createAuthHeaderGenerator(jwtConfig)({ admin: true });
     const res = await agent.get('/').set('Authorization', authHeader);
     expect(res.status).to.equal(401);
   });
@@ -77,7 +86,7 @@ describe('middleware', () => {
       return res.send('OK');
     });
 
-    const authHeader = createAuthHeaderGenerator(jwtConfig)();
+    const authHeader = createAuthHeaderGenerator(jwtConfig)({ admin: true });
     const res = await agent.get('/protected').set('Authorization', authHeader);
     expect(res.status).to.equal(401);
   });

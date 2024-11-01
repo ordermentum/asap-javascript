@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "@ordermentum/asap-core": "*",
-    "axios": "^0.26.1",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1"
   }

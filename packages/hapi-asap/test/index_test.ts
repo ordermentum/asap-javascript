@@ -3,16 +3,24 @@ import { expect } from 'chai';
 import { createAuthHeaderGenerator } from '@ordermentum/asap-core';
 import { publicKey, privateKeyPem } from '@ordermentum/asap-test-helpers';
 import Hapi from '@hapi/hapi';
-import registerPlugin from '../src/middleware';
+import { plugin as hapiAsap } from '../src/middleware';
 
 async function init() {
   const server = Hapi.server({
-    port: 3000,
+    port: 10000,
     host: 'localhost',
   });
 
-  await server.register(registerPlugin);
+  await server.register({
+    plugin: hapiAsap,
+    options: {
+      keyLoader: (_key: string) => Promise.resolve(publicKey),
+      resourceServerAudience: 'test',
+      maxLifeTimeSeconds: 60,
+    },
+  });
 
+  // await server.register(registerPlugin);
   server.auth.strategy('asap', 'hapi-asap', {
     keyLoader: (_key: string) => Promise.resolve(publicKey),
     resourceServerAudience: 'test',
@@ -35,6 +43,7 @@ async function init() {
         return `Ok`;
       }
 
+      // @ts-expect-error
       return `${asapClaims?.aud}`;
     },
   });
@@ -50,6 +59,7 @@ async function init() {
     path: '/required',
     handler(request, h) {
       const { asapClaims } = request.auth.artifacts ?? {};
+      // @ts-expect-error
       return `test ${asapClaims?.aud}`;
     },
   });

@@ -1,6 +1,6 @@
 import { describe, beforeEach } from 'mocha';
 import axios from 'axios';
-import moxios from 'moxios';
+import nock from 'nock';
 import { expect } from 'chai';
 import { privateKeyPem } from '@ordermentum/asap-test-helpers';
 import { createAsapInterceptor, createClient } from '../src';
@@ -19,14 +19,10 @@ describe('createAuthHeaderGenerator', () => {
 
   it('sets the header', async () => {
     const client = axios.create();
-    moxios.install(client);
     client.interceptors.request.use(createAsapInterceptor(jwtConfig));
-    moxios.stubRequest('/say/hello', {
-      status: 200,
-      responseText: 'hello',
-    });
+    nock('http://localhost').get('/say/hello').reply(200, 'hello');
 
-    const res = await client.get('/say/hello');
+    const res = await client.get('http://localhost/say/hello');
     expect(res.status).to.equal(200);
     expect(Object.keys(res?.config?.headers ?? {})).to.include('Authorization');
     expect(res?.config?.headers?.Authorization).to.include('Bearer');
@@ -49,13 +45,9 @@ describe('createAuthHeaderGenerator', () => {
       }
     );
 
-    moxios.install(client);
-    moxios.stubRequest('/say/hello', {
-      status: 200,
-      responseText: 'hello',
-    });
+    nock('http://localhost').get('/say/hello').reply(200, 'hello');
 
-    const res = await client.get('/say/hello');
+    const res = await client.get('http://localhost/say/hello');
     expect(res.status).to.equal(200);
     expect(Object.keys(res?.config?.headers ?? {})).to.include('Authorization');
     expect(res?.config?.headers?.Authorization).to.include('Bearer');
@@ -151,5 +143,5 @@ describe('createAuthHeaderGenerator', () => {
     expect(client1).to.equal(client2);
     expect(client1.defaults.headers['x-custom-header']).to.equal('1');
     expect(client2.defaults.headers['x-custom-header']).to.equal('1');
-  })
+  });
 });

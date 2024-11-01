@@ -2,7 +2,7 @@ import {
   createAuthHeaderGenerator,
   AuthHeaderConfig,
 } from '@ordermentum/asap-core';
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosHeaders } from 'axios';
 import http from 'http';
 import https from 'https';
 
@@ -12,9 +12,13 @@ export const createAsapInterceptor = (authConfig: AuthHeaderConfig) => {
   });
   return (config: AxiosRequestConfig) => {
     const header = headerGenerator();
-    const headers = config.headers ?? {};
-    headers.Authorization = header;
-    return { ...config, headers };
+    // @ts-expect-error RawAxiosHeaders is not accessible for type defs
+    const headers: AxiosHeaders = new AxiosHeaders(config.headers ?? {});
+    headers.set('Authorization', header);
+    return {
+      ...config,
+      headers,
+    };
   };
 };
 
@@ -30,7 +34,7 @@ const getDefaultAxiosConfig = (): AxiosRequestConfig => {
   if (!httpsAgent) {
     httpsAgent = new https.Agent({ keepAlive: true });
   }
-  return { httpAgent, httpsAgent }
+  return { httpAgent, httpsAgent };
 };
 
 export type Options = {
