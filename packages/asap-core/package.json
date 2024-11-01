@@ -33,7 +33,7 @@
     "typecheck": "yarn tsc --noEmit"
   },
   "dependencies": {
-    "axios": "^0.26.1",
+    "axios": "^0.28.0",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "node-cache": "^5.1.2"
