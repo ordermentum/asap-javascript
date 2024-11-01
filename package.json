@@ -4,6 +4,7 @@
   "main": "build/index.js",
   "license": "MIT",
   "devDependencies": {
+    "@changesets/cli": "^2.27.9",
     "@types/express": "4.17.13",
     "@types/jsonwebtoken": "8.5.8",
     "@types/node": "17.0.21",
@@ -21,7 +22,8 @@
   "scripts": {
     "build": "turbo run build --filter=@ordermentum/asap-core && turbo run build --filter=!@ordermentum/asap-core --parallel",
     "lint": "turbo run lint --parallel -- --fix",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "release": "yarn build && changeset publish"
   },
   "dependencies": {},
   "workspaces": [
