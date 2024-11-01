@@ -127,7 +127,7 @@ export function createAsapAuthenticator({
     });
   }
 
-  const verifyOptions = {
+  const verifyOptions: jsonWebToken.VerifyOptions = {
     algorithms: ALLOWED_ALGORITHMS,
     clockTolerance: CLOCK_TOLERANCE_SECONDS,
     audience: resourceServerAudience,
