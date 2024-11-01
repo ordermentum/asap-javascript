@@ -5,7 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
-    "@types/express": "4.17.13",
+    "@types/express": "4.17.21",
     "@types/jsonwebtoken": "8.5.8",
     "@types/node": "17.0.21",
     "chai": "4.3.6",
