@@ -3,6 +3,11 @@
     "version": "0.1.0",
     "main": "build/index.js",
     "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/ordermentum/asap-javascript.git",
+      "directory": "internal/test-helpers"
+    },
     "files": [
       "build/*"
     ],

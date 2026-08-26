@@ -6,6 +6,11 @@
     "build/*"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ordermentum/asap-javascript.git",
+    "directory": "packages/asap-core"
+  },
   "devDependencies": {
     "@ordermentum/asap-test-helpers": "*",
     "@types/chai": "4.3.0",
