@@ -3,6 +3,11 @@
   "version": "1.0.1",
   "main": "build/index.js",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ordermentum/asap-javascript.git",
+    "directory": "packages/express-asap"
+  },
   "files": [
     "build/*"
   ],
