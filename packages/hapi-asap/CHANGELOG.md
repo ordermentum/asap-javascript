@@ -1,5 +1,15 @@
 # @ordermentum/hapi-asap
 
+## 1.0.2
+
+### Patch Changes
+
+- 7b1daf6: Add `repository` metadata to the published packages. Releases now authenticate
+  to npm with GitHub Actions OIDC (trusted publishing) rather than a long-lived
+  token.
+- Updated dependencies [7b1daf6]
+  - @ordermentum/asap-core@1.0.2
+
 ## 1.0.1
 
 ### Patch Changes
