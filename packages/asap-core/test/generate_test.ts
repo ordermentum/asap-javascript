@@ -137,7 +137,7 @@ describe('createAuthHeaderGenerator', () => {
       jwtConfig.privateKey = 'this is not a valid key';
 
       expect(() => createAuthHeaderGenerator(jwtConfig)()).to.throw(
-        /DECODER routines::unsupported/
+        /secretOrPrivateKey must be an asymmetric key/
       );
     });
 
