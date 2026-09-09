@@ -15,7 +15,7 @@ const implementation = (_server: Hapi.Server, options?: any) => {
 
       const token = request?.headers?.authorization;
 
-      if (token) {
+      if (typeof token === 'string' && token) {
         try {
           const payload = await authenticator(token);
           if (payload) {
