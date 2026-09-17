@@ -20,10 +20,10 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 22.x
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 24.x
 
       # Trusted publishing requires npm >= 11.5.1; Node 22 ships npm 10.x.
       - name: Upgrade npm
