@@ -18,6 +18,11 @@
       },
       "dev": {
         "cache": false
+      },
+      "coverage": {
+        "dependsOn": ["build"],
+        "cache": false,
+        "outputs": []
       }
     }
   }

@@ -4,3 +4,5 @@ node_modules/
 yarn-error.log
 newrelic_agent.log
 .turbo/
+coverage/
+.nyc_output/

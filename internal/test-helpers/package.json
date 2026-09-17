@@ -34,10 +34,26 @@
   "scripts": {
     "build": "rm -rf build && tsc",
     "lint": "eslint '**/*.{ts,js}'",
-    "test": "NODE_ENV=test mocha -r ts-node/register/transpile-only 'test/**/*.{ts,js}'",
+    "spec": "NODE_ENV=test mocha -r ts-node/register/transpile-only 'test/**/*.{ts,js}'",
+    "test": "yarn spec",
+    "coverage": "nyc yarn spec",
     "typecheck": "yarn tsc --noEmit"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.0"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true,
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/build/**"
+    ],
+    "reporter": [
+      "text-summary"
+    ]
   }
 }

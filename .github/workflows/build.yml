@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   validate:
@@ -21,4 +24,13 @@ jobs:
       - run: yarn
       - run: yarn build
       - run: yarn turbo run lint --parallel
-      - run: yarn test
+      - run: yarn coverage
+
+      # Fork PRs cannot read secrets, so skip the upload rather than fail the build.
+      - name: Report coverage to DeepSource
+        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
+        env:
+          DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+        run: |
+          curl https://deepsource.io/cli | sh
+          ./bin/deepsource report --analyzer test-coverage --key javascript --value-file ./coverage/lcov.info
