@@ -1,0 +1,28 @@
+version = 1
+
+test_patterns = [
+  "packages/**/test/**",
+  "internal/**/test/**"
+]
+
+exclude_patterns = [
+  "packages/asap-core/src/keys_for_test/**",
+  "packages/asap-core/test/data/**",
+  "**/build/**"
+]
+
+[[analyzers]]
+name = "javascript"
+
+  [analyzers.meta]
+  environment = [
+    "nodejs",
+    "mocha"
+  ]
+
+[[analyzers]]
+name = "test-coverage"
+enabled = true
+
+[[analyzers]]
+name = "secrets"

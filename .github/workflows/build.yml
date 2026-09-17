@@ -4,13 +4,20 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   validate:
     if: ${{ github.actor != 'renovate[bot]' }}
     runs-on: ubuntu-latest
     steps:
+      # DeepSource cannot attach coverage to the PR merge commit, which does
+      # not exist upstream, so check out the head commit instead.
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
@@ -21,4 +28,13 @@ jobs:
       - run: yarn
       - run: yarn build
       - run: yarn turbo run lint --parallel
-      - run: yarn test
+      - run: yarn coverage
+
+      # Fork PRs cannot read secrets, so skip the upload rather than fail the build.
+      - name: Report coverage to DeepSource
+        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
+        env:
+          DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+        run: |
+          curl https://deepsource.io/cli | sh
+          ./bin/deepsource report --analyzer test-coverage --key javascript --value-file ./coverage/lcov.info
